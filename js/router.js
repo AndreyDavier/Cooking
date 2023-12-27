@@ -34,6 +34,12 @@ function router() {
     else if (location.hash === "#recipes/list") {
         recipesListRender()
     }
+    else if (location.hash === "#categorRecipes/create") {
+        categorRecipesCreate()
+    }
+    else if (location.hash === "#categorRecipes/list") {
+        categorRecipesListRender()
+    }
 
 
 }
