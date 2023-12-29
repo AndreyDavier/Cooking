@@ -40,6 +40,13 @@ function router() {
     else if (location.hash === "#categorRecipes/list") {
         categorRecipesListRender()
     }
+    else if (location.hash.includes("#units/delete")) {
+        unitsDelete(location.hash.slice("#units/delete/".length))
+    }
+    else if (location.hash.includes("#units/update")) {
+        unitsUpdate(location.hash.slice("#units/update/".length))
+    }
+
 
 
 }

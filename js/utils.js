@@ -9,6 +9,9 @@ function tag(params) {
     if (params.href) {
         tag.href = params.href;
     }
+    if (params.value) {
+        tag.value = params.value
+    }
 
 
     return tag
