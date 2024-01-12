@@ -21,7 +21,7 @@ function categoriesListRender() {
 }
 
 function categoriesDelete(categoriesID) {
-    console.log(document.body.innerHTML = "loading...");
+    document.body.innerHTML = "loading...";
 
     fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/product-categories/${categoriesID}`, {
         method: "DELETE"

@@ -31,8 +31,7 @@ function productsDelete(productsID) {
 }
 
 function productsUpdate(productsID) {
-    document.body.innerHTML = "loading..."
-
+    document.body.innerHTML = "loading...";
     fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/products/${productsID}`)
         .then((res) => res.json())
         .then((res) => {

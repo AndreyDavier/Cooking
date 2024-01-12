@@ -21,7 +21,7 @@ function recipesListRender() {
 }
 
 function recipesDelete(recipesID) {
-    console.log(document.body.innerHTML = "loading...");
+    document.body.innerHTML = "loading...";
 
     fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/recipies/${recipesID}`, {
         method: "DELETE"
@@ -31,7 +31,6 @@ function recipesDelete(recipesID) {
 }
 
 function recipesUpdate(recipesID) {
-    document.body.innerHTML = "loading..."
 
     fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/recipies/${recipesID}`)
         .then((res) => res.json())

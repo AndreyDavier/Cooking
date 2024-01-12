@@ -16,3 +16,9 @@ function tag(params) {
 
     return tag
 }
+
+function loading() {
+    let loading = tag({ tag: "span", className: "spantitle", parent: document.body, html: "loading..." })
+    return loading
+}
+
