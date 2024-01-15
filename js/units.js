@@ -24,13 +24,13 @@ function unitsDelete(unitId) {
     api.units.delete(unitId).then(() => {
         location.hash = "#units/list"
     })
-
 }
-function createTags() {
+
+function createTags(value) {
     tag({ tag: "h4", className: "header", parent: document.body, html: "Eдиницы" })
 
     let divForm = tag({ tag: "div", className: "divForm", parent: document.body })
-    let input = tag({ tag: "input", className: "input", parent: divForm })
+    let input = tag({ tag: "input", className: "input", parent: divForm, value: value })
     let button = tag({ tag: "button", className: "button", parent: divForm, html: "Сохранить" })
 
     return {
@@ -46,11 +46,9 @@ function unitsUpdate(unitId) {
         .then((res) => res.json())
         .then((res) => {
             load.remove();
-
-            let form = createTags()
+            let form = createTags(res.name)
 
             form.button.addEventListener("click", () => {
-                let span = tag({ tag: "span", className: "spantitle", parent: document.body, html: "loading..." })
 
                 api.units.update(form.input.value, unitId).then(() => {
                     load.remove()
