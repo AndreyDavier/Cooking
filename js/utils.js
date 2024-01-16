@@ -14,11 +14,11 @@ function tag(params) {
     }
 
 
-    return tag
+    return tag;
 }
 
 function loading() {
-    let loading = tag({ tag: "span", className: "spantitle", parent: document.body, html: "loading..." })
-    return loading
+    let loading = tag({ tag: "span", className: "spantitle", parent: document.body, html: "loading..." });
+    return loading;
 }
 

@@ -10,76 +10,76 @@ function router() {
     }
 
     else if (location.hash === "#categories/create") {
-        categoriesCreate()
+        categoriesCreate();
     }
     else if (location.hash === "#categories/list") {
-        categoriesListRender()
+        categoriesListRender();
     }
 
     else if (location.hash === "#products/create") {
-        productsCreate()
+        productsCreate();
     }
     else if (location.hash === "#products/list") {
-        productsListRender()
+        productsListRender();
     }
     else if (location.hash === "#menu/create") {
-        menuCreate()
+        menuCreate();
     }
     else if (location.hash === "#menu/list") {
-        menuListRender()
+        menuListRender();
     }
     else if (location.hash === "#recipes/create") {
-        recipesCreate()
+        recipesCreate();
     }
     else if (location.hash === "#recipes/list") {
-        recipesListRender()
+        recipesListRender();
     }
     else if (location.hash === "#categorRecipes/create") {
-        categorRecipesCreate()
+        categorRecipesCreate();
     }
     else if (location.hash === "#categorRecipes/list") {
-        categorRecipesListRender()
+        categorRecipesListRender();
     }
     else if (location.hash.includes("#units/delete")) {
-        unitsDelete(location.hash.slice("#units/delete/".length))
+        unitsDelete(location.hash.slice("#units/delete/".length));
     }
     else if (location.hash.includes("#units/update")) {
-        unitsUpdate(location.hash.slice("#units/update/".length))
+        unitsUpdate(location.hash.slice("#units/update/".length));
     }
     else if (location.hash.includes("#products/delete")) {
-        productsDelete(location.hash.slice("products/delete/".length))
+        productsDelete(location.hash.slice("products/delete/".length));
     }
     else if (location.hash.includes("#products/update")) {
-        productsUpdate(location.hash.slice("#products/update/".length))
+        productsUpdate(location.hash.slice("#products/update/".length));
     }
     else if (location.hash.includes("#menu/delete")) {
-        menuDelete(location.hash.slice("menu/delete/".length))
+        menuDelete(location.hash.slice("menu/delete/".length));
     }
     else if (location.hash.includes("menu/update")) {
-        menuUpdate(location.hash.slice("#menu/update/".length))
+        menuUpdate(location.hash.slice("#menu/update/".length));
     }
     else if (location.hash.includes("#recipes/delete")) {
-        recipesDelete(location.hash.slice("#recipes/delete/".length))
+        recipesDelete(location.hash.slice("#recipes/delete/".length));
     }
     else if (location.hash.includes("#recipes/update")) {
-        recipesUpdate(location.hash.slice("#recipes/update/".length))
+        recipesUpdate(location.hash.slice("#recipes/update/".length));
     }
     else if (location.hash.includes("#categorRecipes/delete")) {
-        categorRecipesDelete(location.hash.slice("categorRecipes/delete/".length))
+        categorRecipesDelete(location.hash.slice("categorRecipes/delete/".length));
     }
     else if (location.hash.includes("#categorRecipes/update")) {
-        categorRecipesUpdate(location.hash.slice("#categorRecipes/update/".length))
+        categorRecipesUpdate(location.hash.slice("#categorRecipes/update/".length));
     }
     else if (location.hash.includes("#categories/delete")) {
-        categoriesDelete(location.hash.slice("categories/delete/".length))
+        categoriesDelete(location.hash.slice("categories/delete/".length));
     }
     else if (location.hash.includes("#categories/update")) {
-        categoriesUpdate(location.hash.slice("#categories/update/".length))
+        categoriesUpdate(location.hash.slice("#categories/update/".length));
     }
 }
 
 
 
 window.addEventListener("hashchange", () => {
-    router()
+    router();
 })

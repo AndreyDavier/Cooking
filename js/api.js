@@ -25,6 +25,10 @@ let api = {
             return fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/units/${unitId}`, {
                 method: "DELETE"
             })
+        },
+        read: (unitId) => {
+            return fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/units/${unitId}`)
+                .then((res) => res.json())
         }
     },
 
@@ -76,11 +80,12 @@ let api = {
             })
 
         },
-        create: (productName) => {
+        create: (productName, categoryId) => {
             return fetch("http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/products/", {
                 method: "PUT",
                 body: JSON.stringify({
-                    name: productName
+                    name: productName,
+                    category_id: categoryId
                 })
             })
         }
