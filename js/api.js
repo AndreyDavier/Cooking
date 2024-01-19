@@ -58,6 +58,10 @@ let api = {
                     name: categoriesName
                 })
             })
+        },
+        read: (categoriesId) => {
+            return fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/product-categories/${categoriesId}`)
+                .then((res) => res.json())
         }
     },
     products: {
@@ -80,14 +84,19 @@ let api = {
             })
 
         },
-        create: (productName, categoryId) => {
+        create: (productName, categoryId, unitId) => {
             return fetch("http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/products/", {
                 method: "PUT",
                 body: JSON.stringify({
                     name: productName,
-                    category_id: categoryId
+                    category_id: categoryId,
+                    unit_id: unitId
                 })
             })
+        },
+        read: (productsId) => {
+            return fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/products/${productsId}`)
+                .then((res) => res.json())
         }
     },
     menu: {
@@ -116,6 +125,10 @@ let api = {
                     name: menuName
                 })
             })
+        },
+        read: (menuId) => {
+            return fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/menu/${menuId}`)
+                .then((res) => res.json())
         }
 
     },
@@ -146,6 +159,10 @@ let api = {
                     name: categorRecipesName
                 })
             })
+        },
+        read: (categorRecipesId) => {
+            return fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/recipe-categories/${categorRecipesId}`)
+                .then((res) => res.json())
         }
     },
     recipes: {
@@ -174,6 +191,10 @@ let api = {
                     name: categoriesName
                 })
             })
+        },
+        read: (recipesId) => {
+            return etch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/recipies/${recipesId}`)
+                .then((res) => res.json())
         }
     }
 

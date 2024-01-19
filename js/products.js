@@ -25,16 +25,59 @@ function productsDelete(productsId) {
     })
 }
 
-function productsForm(html, value) {
+function createSelect(parent, value) {
+    let select = tag({ tag: "select", className: "products-select", parent: parent, value });
+    return select
+}
+
+
+function productsForm(html, value, categoryId, unitId) {
     tag({ tag: "h4", className: "header", parent: document.body, html: html });
 
     let divForm = tag({ tag: "div", className: "divForm", parent: document.body });
     let input = tag({ tag: "input", className: "input", parent: divForm, value: value });
+
+
+
+    let divSelect = tag({ tag: "div", class: "div-select", parent: divForm })
+    
+    let selectCategoreies = createSelect(divSelect, categoryId)
+
+    tag({ tag: "button", className: "button-plus", parent: divSelect, html: '+' })
+
+    let categories = api.categories.list().then((res) => {
+        for (let category of res.data) {
+            let options = tag({ tag: "option", class: "products-option", parent: selectCategoreies, html: category.name, value: category.id });
+
+        }
+
+        selectCategoreies.value = categoryId
+    })
+
+
+
+
+    let selectUnits = createSelect(divSelect, unitId)
+    tag({ tag: "button", className: "button-plus", parent:  divSelect, html: '+' })
+    console.log(unitId);
+
+    let unints = api.units.list().then((res) => {
+        for (let unit of res.data) {
+            tag({ tag: "option", class: "products-option", parent: selectUnits, html: unit.name, value: unit.id });
+        }
+
+        selectUnits.value = unitId
+    })
+
     let button = tag({ tag: "button", className: "button", parent: divForm, html: "Сохранить" })
+
+
 
     return {
         input,
-        button
+        button,
+        selectCategoreies,
+        selectUnits
     };
 }
 
@@ -43,44 +86,28 @@ function productsUpdate(productsId) {
 
     let load = loading();
 
-    fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/products/${productsId}`)
-        .then((res) => res.json())
-        .then((res) => {
-            load.remove();
-            let form = productsForm("Редактирование продукта", res.name);
+    api.products.read(productsId).then((res) => {
+        load.remove();
+        let form = productsForm("Редактирование продукта", res.name, res.category_id, res.unit_id);
 
-            form.button.addEventListener("click", () => {
-                api.products.update(form.input.value, productsID).then(() => {
-                    load.remove();
-                    location.hash = "#products/list";
-                })
+        form.button.addEventListener("click", () => {
+            api.products.update(form.input.value, productsId).then(() => {
+                load.remove();
+                location.hash = "#products/list";
             })
         })
-}
-
-function productsOptions() {
-    let select = tag({ tag: "select", className: "products-select", parent: document.body });
-
-    let categories = api.categories.list().then((res) => {
-        console.log(res.data);
-        for (let category of res.data) {
-            tag({ tag: "option", class: "products-option", parent: select, html: category.name, value: category.id });
-        }
     })
-
-    return {
-        select
-    };
-
 }
+
+
+
 
 function productsCreate() {
 
     let form = productsForm("Создание продукта");
-    let options = productsOptions();
 
     form.button.addEventListener("click", (e) => {
-        api.products.create(form.input.value, options.select.value).then(() => {
+        api.products.create(form.input.value, form.selectCategoreies.value, form.selectUnits.value).then(() => {
             location.hash = "#products/list";
 
         })

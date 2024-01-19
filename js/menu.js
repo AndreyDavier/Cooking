@@ -29,7 +29,7 @@ function menuDelete(menuId) {
 }
 
 function menuForm(value) {
-    tag({ tag: "h4", className: "header", parent: document.body, html: "Eдиницы" });
+    tag({ tag: "h4", className: "header", parent: document.body, html: "Создание меню" });
 
     let divForm = tag({ tag: "div", className: "divForm", parent: document.body });
     let input = tag({ tag: "input", className: "input", parent: divForm, value: value });
@@ -44,18 +44,16 @@ function menuForm(value) {
 function menuUpdate(menuId) {
     let load = loading();
 
-    fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/menu/${menuID}`)
-        .then((res) => res.json())
-        .then((res) => {
-            load.remove();
-            let form = menuForm(res.name);
+    api.menu.read(menuId).then((res) => {
+        load.remove();
+        let form = menuForm(res.name);
 
-            form.button.addEventListener("click", () => {
-                api.menu.update(form.input.value, menuId).then(() => {
-                    location.hash = "#menu/list";
-                })
+        form.button.addEventListener("click", () => {
+            api.menu.update(form.input.value, menuId).then(() => {
+                location.hash = "#menu/list";
             })
         })
+    })
 }
 
 function menuCreate() {

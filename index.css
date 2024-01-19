@@ -10,7 +10,6 @@ div a {
 }
 
 a {
-    /* border: 1px solid black; */
     padding: 10px 10px 10px 10px;
 }
 
@@ -27,6 +26,7 @@ a {
     height: 30px;
     background: blue;
     color: #fff;
+    cursor: pointer;
 }
 
 .divForm {
@@ -35,7 +35,23 @@ a {
     width: 299px;
     gap: 25px;
 }
-.unitsUl{
+
+.unitsUl {
     margin-bottom: 25px;
     margin-top: 25px;
+}
+
+.button-plus {
+    width: 30px;
+    height: 30px;
+    background: blue;
+    color: white;
+    cursor: pointer;
+    margin-left: 30px;
+    margin-bottom: 20px;
+}
+
+
+select {
+    width: 150px;
 }

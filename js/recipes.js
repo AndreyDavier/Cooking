@@ -28,7 +28,7 @@ function recipesDelete(recipesId) {
 }
 
 function recipesForm(value) {
-    tag({ tag: "h4", className: "header", parent: document.body, html: "Eдиницы" });
+    tag({ tag: "h4", className: "header", parent: document.body, html: "Создание категории рецептов" });
 
     let divForm = tag({ tag: "div", className: "divForm", parent: document.body });
     let input = tag({ tag: "input", className: "input", parent: divForm, value: value });
@@ -44,20 +44,19 @@ function recipesUpdate(recipesId) {
 
     let load = loading();
 
-    fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/recipies/${recipesId}`)
-        .then((res) => res.json())
-        .then((res) => {
-            load.remove();
 
-            let form = recipesForm(res.name);
+    api.recipes.read(recipesId).then((res) => {
+        load.remove();
 
-            form.button.addEventListener("click", () => {
-                api.recipes.update(form.input.value, recipesID).then(() => {
-                    load.remove();
-                    location.hash = "#recipes/list";
-                })
+        let form = recipesForm(res.name);
+
+        form.button.addEventListener("click", () => {
+            api.recipes.update(form.input.value, recipesID).then(() => {
+                load.remove();
+                location.hash = "#recipes/list";
             })
         })
+    })
 }
 
 function recipesCreate() {

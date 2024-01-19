@@ -27,7 +27,7 @@ function categoriesDelete(categoriesId) {
 }
 
 function categoriesForm(value) {
-    tag({ tag: "h4", className: "header", parent: document.body, html: "Eдиницы" });
+    tag({ tag: "h4", className: "header", parent: document.body, html: "Создание категории" });
 
     let divForm = tag({ tag: "div", className: "divForm", parent: document.body });
     let input = tag({ tag: "input", className: "input", parent: divForm, value: value });
@@ -43,20 +43,19 @@ function categoriesUpdate(categoriesId) {
 
     let load = loading();
 
-    fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/product-categories/${categoriesId}`)
-        .then((res) => res.json())
-        .then((res) => {
-            load.remove();
-            let form = categoriesForm(res.name);
 
-            form.button.addEventListener("click", () => {
+    api.categories.read(categoriesId).then((res) => {
+        load.remove();
+        let form = categoriesForm(res.name);
 
-                api.categories.update(form.input.value, categoriesID).then(() => {
-                    load.remove();
-                    location.hash = "#categories/list";
-                })
+        form.button.addEventListener("click", () => {
+
+            api.categories.update(form.input.value, categoriesID).then(() => {
+                load.remove();
+                location.hash = "#categories/list";
             })
         })
+    })
 
 }
 
@@ -64,7 +63,7 @@ function categoriesCreate() {
 
     let form = categoriesForm()
 
-    form.button.addEventListener("click", (e) => {
+    form.button.addEventListener("click", () => {
         api.categories.create(form.input.value).then(() => {
             location.hash = "#categories/list"
         })
