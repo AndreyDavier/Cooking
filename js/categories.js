@@ -26,10 +26,10 @@ function categoriesDelete(categoriesId) {
     })
 }
 
-function categoriesForm(value) {
-    tag({ tag: "h4", className: "header", parent: document.body, html: "Создание категории" });
+function categoriesForm(value, parent) {
+    tag({ tag: "h4", className: "header", parent: parent, html: "Создание категории" });
 
-    let divForm = tag({ tag: "div", className: "divForm", parent: document.body });
+    let divForm = tag({ tag: "div", className: "divForm", parent: parent });
     let input = tag({ tag: "input", className: "input", parent: divForm, value: value });
     let button = tag({ tag: "button", className: "button", parent: divForm, html: "Сохранить" });
 
@@ -46,11 +46,12 @@ function categoriesUpdate(categoriesId) {
 
     api.categories.read(categoriesId).then((res) => {
         load.remove();
-        let form = categoriesForm(res.name);
+
+        let form = categoriesForm(res.name, document.body);
 
         form.button.addEventListener("click", () => {
 
-            api.categories.update(form.input.value, categoriesID).then(() => {
+            api.categories.update(form.input.value, categoriesId).then(() => {
                 load.remove();
                 location.hash = "#categories/list";
             })
@@ -59,13 +60,14 @@ function categoriesUpdate(categoriesId) {
 
 }
 
-function categoriesCreate() {
+function categoriesCreate(params) {
 
-    let form = categoriesForm()
+    let form = categoriesForm(null, params.parent)
 
     form.button.addEventListener("click", () => {
-        api.categories.create(form.input.value).then(() => {
-            location.hash = "#categories/list"
+        api.categories.create(form.input.value).then((res) => {
+            // location.hash = "#categories/list"
+            params.afterCreate(res)
         })
     })
 }

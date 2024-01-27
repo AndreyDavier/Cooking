@@ -3,14 +3,24 @@ function router() {
     document.body.innerHTML = ""
     navRender();
     if (location.hash === "#units/create") {
-        unitsCreate();
+        unitsCreate({
+            parent: document.body,
+            afterCreate: () => {
+                location.hash = "#units/list"
+            }
+        });
     }
     else if (location.hash === "#units/list") {
         unitsListRender();
     }
 
     else if (location.hash === "#categories/create") {
-        categoriesCreate();
+        categoriesCreate({
+            parent: document.body,
+            afterCreate: () => {
+                location.hash = "#categories/list"
+            }
+        });
     }
     else if (location.hash === "#categories/list") {
         categoriesListRender();

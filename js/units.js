@@ -26,10 +26,10 @@ function unitsDelete(unitId) {
     })
 }
 
-function unitsForm(value) {
-    tag({ tag: "h4", className: "header", parent: document.body, html: "Eдиницы" });
+function unitsForm(value, parent) {
+    tag({ tag: "h4", className: "header", parent: parent, html: "Eдиницы" });
 
-    let divForm = tag({ tag: "div", className: "divForm", parent: document.body });
+    let divForm = tag({ tag: "div", className: "divForm", parent: parent });
     let input = tag({ tag: "input", className: "input", parent: divForm, value: value });
     let button = tag({ tag: "button", className: "button", parent: divForm, html: "Сохранить" });
 
@@ -40,17 +40,15 @@ function unitsForm(value) {
 }
 
 function unitsUpdate(unitId) {
-    let load = loading();
 
 
     api.units.read(unitId).then((res) => {
-        load.remove();
-        let form = unitsForm(res.name);
+
+        let form = unitsForm(res.name, document.body);
 
         form.button.addEventListener("click", () => {
 
             api.units.update(form.input.value, unitId).then(() => {
-                load.remove();
                 location.hash = "#units/list";
             })
         })
@@ -61,13 +59,14 @@ function unitsUpdate(unitId) {
 
 }
 
-function unitsCreate() {
+function unitsCreate(params) {
 
-    let form = unitsForm();
+    let form = unitsForm(null, params.parent);
 
-    form.button.addEventListener("click", (e) => {
-        api.units.create(form.input.value).then(() => {
-            location.hash = "#units/list";
+    form.button.addEventListener("click", () => {
+        api.units.create(form.input.value).then((res) => {
+            // location.hash = "#units/list";
+            params.afterCreate(res)
         })
     })
 

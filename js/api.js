@@ -6,7 +6,7 @@ let api = {
                 body: JSON.stringify({
                     name: unitName
                 })
-            })
+            }).then((res) => res.json())
         },
         update: (unitName, unitId) => {
             let formdata = new FormData();
@@ -57,7 +57,7 @@ let api = {
                 body: JSON.stringify({
                     name: categoriesName
                 })
-            })
+            }).then((res) => res.json())
         },
         read: (categoriesId) => {
             return fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/product-categories/${categoriesId}`)
@@ -74,9 +74,11 @@ let api = {
                 method: "DELETE"
             })
         },
-        update: (productName, productsID) => {
+        update: (productName, productsID, categoryId, unitId) => {
             let formdata = new FormData();
             formdata.append("name", productName)
+            formdata.append("category_id", categoryId)
+            formdata.append("unit_id", unitId)
 
             return fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/products/${productsID}`, {
                 method: "POST",
