@@ -2,7 +2,22 @@
 function router() {
     document.body.innerHTML = ""
     navRender();
-    if (location.hash === "#units/create") {
+    if (location.hash === "#menu/create") {
+        menuCreate();
+    }
+
+    else if (location.hash === "#menu/list") {
+        menuListRender();
+    }
+
+    else if (location.hash.includes("#menu/delete")) {
+        menuDelete(location.hash.slice("menu/delete/".length));
+    }
+    else if (location.hash.includes("menu/update")) {
+        menuUpdate(location.hash.slice("#menu/update/".length));
+    }
+
+    else if (location.hash === "#units/create") {
         unitsCreate({
             parent: document.body,
             afterCreate: () => {
@@ -10,6 +25,7 @@ function router() {
             }
         });
     }
+
     else if (location.hash === "#units/list") {
         unitsListRender();
     }
@@ -32,12 +48,7 @@ function router() {
     else if (location.hash === "#products/list") {
         productsListRender();
     }
-    else if (location.hash === "#menu/create") {
-        menuCreate();
-    }
-    else if (location.hash === "#menu/list") {
-        menuListRender();
-    }
+
     else if (location.hash === "#recipes/create") {
         recipesCreate();
     }
@@ -45,7 +56,13 @@ function router() {
         recipesListRender();
     }
     else if (location.hash === "#categorRecipes/create") {
-        categorRecipesCreate();
+        categorRecipesCreate({
+            parent: document.body,
+            afterCreate: () => {
+                location.hash = "#categorRecipes/list"
+
+            }
+        });
     }
     else if (location.hash === "#categorRecipes/list") {
         categorRecipesListRender();
@@ -61,12 +78,6 @@ function router() {
     }
     else if (location.hash.includes("#products/update")) {
         productsUpdate(location.hash.slice("#products/update/".length));
-    }
-    else if (location.hash.includes("#menu/delete")) {
-        menuDelete(location.hash.slice("menu/delete/".length));
-    }
-    else if (location.hash.includes("menu/update")) {
-        menuUpdate(location.hash.slice("#menu/update/".length));
     }
     else if (location.hash.includes("#recipes/delete")) {
         recipesDelete(location.hash.slice("#recipes/delete/".length));

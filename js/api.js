@@ -177,25 +177,27 @@ let api = {
                 method: "DELETE"
             })
         },
-        update: (recipesName, recipesID) => {
+        update: (recipesName, recipesId, categoryId) => {
             let formdata = new FormData();
             formdata.append("name", recipesName)
+            formdata.append("recipe_category_id", categoryId)
 
-            return fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/recipies/${recipesID}`, {
+            return fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/recipies/${recipesId}`, {
                 method: "POST",
                 body: formdata
             })
         },
-        create: (categoriesName) => {
+        create: (categoriesName, categoryId) => {
             return fetch("http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/recipies/", {
                 method: "PUT",
                 body: JSON.stringify({
-                    name: categoriesName
+                    name: categoriesName,
+                    recipe_category_id: categoryId
                 })
             })
         },
         read: (recipesId) => {
-            return etch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/recipies/${recipesId}`)
+            return fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/recipies/${recipesId}`)
                 .then((res) => res.json())
         }
     }

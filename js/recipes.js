@@ -26,17 +26,64 @@ function recipesDelete(recipesId) {
         location.hash = "#recipes/list";
     })
 }
+// RECIPESFORM
+function recipesForm(html, value, categorRecipesId) {
 
-function recipesForm(value) {
-    tag({ tag: "h4", className: "header", parent: document.body, html: "Создание категории рецептов" });
+    let load = loading();
+
+    tag({ tag: "h4", className: "header", parent: document.body, html: html });
 
     let divForm = tag({ tag: "div", className: "divForm", parent: document.body });
     let input = tag({ tag: "input", className: "input", parent: divForm, value: value });
+
+    let divSelect = tag({ tag: "div", className: 'div-select', parent: divForm });
+
+    let selectCategoreiesRecipes = createSelect(divSelect, categorRecipesId)
+    console.log(selectCategoreiesRecipes.value);
+
+    let recipePlus = tag({ tag: "button", className: "button-plus", parent: divSelect, html: "+" })
+
+
+    recipePlus.addEventListener("click", () => {
+        let popupBg = tag({ tag: "div", className: "popup-bg", parent: document.body })
+        let popupContent = tag({ tag: "div", className: "popup-content", parent: popupBg })
+
+        categorRecipesCreate({
+            parent: popupContent,
+            afterCreate: (responce) => {
+                popupBg.remove();
+
+                api.categorRecipes.list().then((res) => {
+                    selectCategoreiesRecipes.innerHTML = ''
+
+                    for (let categoriesRecipes of res.data) {
+                        let options = tag({ tag: "option", className: "option", parent: selectCategoreiesRecipes, html: categoriesRecipes.name, value: categoriesRecipes.id })
+
+                        selectCategoreiesRecipes.value = responce.id
+                    }
+                })
+            }
+        })
+
+    })
+
+    let categoriesRecipes = api.categorRecipes.list().then((res) => {
+        for (let categoriesRecipes of res.data) {
+            let options = tag({ tag: "option", className: "option", parent: selectCategoreiesRecipes, html: categoriesRecipes.name, value: categoriesRecipes.id })
+        }
+
+    })
+
     let button = tag({ tag: "button", className: "button", parent: divForm, html: "Сохранить" });
+
+    Promise.all([categoriesRecipes]).then(() => {
+        load.remove()
+    })
 
     return {
         input,
-        button
+        button,
+        selectCategoreiesRecipes
     };
 }
 
@@ -47,11 +94,11 @@ function recipesUpdate(recipesId) {
 
     api.recipes.read(recipesId).then((res) => {
         load.remove();
-
-        let form = recipesForm(res.name);
+        console.log(res);
+        let form = recipesForm("Категория", res.name, res.recipe_category_id);
 
         form.button.addEventListener("click", () => {
-            api.recipes.update(form.input.value, recipesID).then(() => {
+            api.recipes.update(form.input.value, recipesId, form.selectCategoreiesRecipes.value).then(() => {
                 load.remove();
                 location.hash = "#recipes/list";
             })
@@ -61,10 +108,10 @@ function recipesUpdate(recipesId) {
 
 function recipesCreate() {
 
-    let form = recipesForm();
+    let form = recipesForm("Создание рецепта");
 
-    form.button.addEventListener("click", (e) => {
-        api.recipes.create(form.input.value).then(() => {
+    form.button.addEventListener("click", () => {
+        api.recipes.create(form.input.value, form.selectCategoreiesRecipes.value).then(() => {
             location.hash = "#recipes/list";
         })
     })

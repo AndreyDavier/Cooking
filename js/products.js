@@ -25,11 +25,6 @@ function productsDelete(productsId) {
     })
 }
 
-function createSelect(parent, value) {
-    let select = tag({ tag: "select", className: "products-select", parent: parent, value });
-    return select
-}
-
 
 
 function productsForm(html, value, categoryId, unitId) {
@@ -40,8 +35,6 @@ function productsForm(html, value, categoryId, unitId) {
 
     let divForm = tag({ tag: "div", className: "divForm", parent: document.body });
     let input = tag({ tag: "input", className: "input", parent: divForm, value: value });
-
-
 
     let divSelect = tag({ tag: "div", class: "div-select", parent: divForm })
 
@@ -79,7 +72,7 @@ function productsForm(html, value, categoryId, unitId) {
     let categories = api.categories.list().then((res) => {
 
         for (let category of res.data) {
-            let options = tag({ tag: "option", class: "products-option", parent: selectCategoreies, html: category.name, value: category.id });
+            let options = tag({ tag: "option", className: "option", parent: selectCategoreies, html: category.name, value: category.id });
         }
 
         selectCategoreies.value = categoryId
@@ -127,6 +120,7 @@ function productsForm(html, value, categoryId, unitId) {
 
         selectUnits.value = unitId
     })
+    
     Promise.all([categories, units]).then(() => {
         load.remove()
     })
@@ -146,11 +140,16 @@ function productsForm(html, value, categoryId, unitId) {
 
 function productsUpdate(productsId) {
 
+    let load = loading();
+    
     api.products.read(productsId).then((res) => {
+        load.remove()
+        console.log(res);
         let form = productsForm("Редактирование продукта", res.name, res.category_id, res.unit_id);
 
         form.button.addEventListener("click", () => {
             api.products.update(form.input.value, productsId, form.selectCategoreies.value, form.selectUnits.value).then(() => {
+                load.remove();
                 location.hash = "#products/list";
             })
         })
@@ -165,12 +164,9 @@ function productsCreate() {
 
     let form = productsForm("Создание продукта");
 
-    form.button.addEventListener("click", (e) => {
+    form.button.addEventListener("click", () => {
         api.products.create(form.input.value, form.selectCategoreies.value, form.selectUnits.value).then(() => {
             location.hash = "#products/list";
-
         })
     })
-
-
 }

@@ -22,3 +22,10 @@ function loading() {
     return loading;
 }
 
+function createSelect(parent, value) {
+    let select = tag({ tag: "select", className: "products-select", parent: parent, value: value });
+    return select
+}
+
+
+

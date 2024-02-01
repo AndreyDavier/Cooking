@@ -45,12 +45,12 @@ function categorRecipesUpdate(categorRecipesId) {
 
 
     api.categorRecipes.read(categorRecipesId).then((res) => {
-
+        console.log(res);
         load.remove();
         let form = categorRecipesForm(res.name);
 
         form.button.addEventListener("click", () => {
-            api.categorRecipes.update(form.input.value, categorRecipesID).then(() => {
+            api.categorRecipes.update(form.input.value, categorRecipesId).then(() => {
                 load.remove();
                 location.hash = "#categorRecipes/list";
             })
@@ -58,13 +58,13 @@ function categorRecipesUpdate(categorRecipesId) {
     })
 }
 
-function categorRecipesCreate() {
+function categorRecipesCreate(params) {
 
-    let form = categorRecipesForm()
+    let form = categorRecipesForm(null, params.parent)
 
-    form.button.addEventListener("click", (e) => {
-        api.categorRecipes.create(form.input.value).then(() => {
-            location.hash = "#categorRecipes/list"
+    form.button.addEventListener("click", () => {
+        api.categorRecipes.create(form.input.value).then((res) => {
+          params.afterCreate(res)
         })
     })
 }

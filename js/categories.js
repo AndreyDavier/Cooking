@@ -66,7 +66,6 @@ function categoriesCreate(params) {
 
     form.button.addEventListener("click", () => {
         api.categories.create(form.input.value).then((res) => {
-            // location.hash = "#categories/list"
             params.afterCreate(res)
         })
     })
