@@ -27,7 +27,7 @@ function recipesDelete(recipesId) {
     })
 }
 // RECIPESFORM
-function recipesForm(html, value, categorRecipesId) {
+function recipesForm(html, value, categorRecipesId, person) {
 
     let load = loading();
 
@@ -35,13 +35,39 @@ function recipesForm(html, value, categorRecipesId) {
 
     let divForm = tag({ tag: "div", className: "divForm", parent: document.body });
     let input = tag({ tag: "input", className: "input", parent: divForm, value: value });
-
     let divSelect = tag({ tag: "div", className: 'div-select', parent: divForm });
 
     let selectCategoreiesRecipes = createSelect(divSelect, categorRecipesId)
     console.log(selectCategoreiesRecipes.value);
 
     let recipePlus = tag({ tag: "button", className: "button-plus", parent: divSelect, html: "+" })
+
+    let divPerson = tag({ tag: "div", className: "quatity-block", parent: divForm })
+    tag({ tag: "h4", className: "head-quatity", parent: divPerson, html: "Количетсво человек" })
+    let inputPerson = tag({ tag: "input", className: "quatity-input", parent: divPerson, value: person })
+
+
+    tag({ tag: "h4", className: "products-head", parent: divForm, html: "Продукты" })
+    let divIngredients = tag({ tag: "div", className: "div-ingredients", parent: divForm })
+
+    let divSelectProducts = tag({ tag: "div", className: 'div-select', parent:  divIngredients });
+    let ingredientsSelect = createSelect(divSelectProducts, null)
+    let productPlus = tag({ tag: "button", className: "button-plus", parent: divSelectProducts, html: "+" })
+    
+
+    api.products.list().then((res) => {
+        for (let product of res.data) {
+            tag({ tag: "option", className: "option", parent: ingredientsSelect, html: product.name, value: product.id })
+
+            ingredientsSelect.value = product.id
+
+        }
+    })
+
+    tag({ tag: "h4", className: "head-units", parent: divIngredients, html: "Количетсво" })
+
+    let inputUnits =  tag({ tag: "input", className: "units-input", parent: divIngredients})
+
 
 
     recipePlus.addEventListener("click", () => {
@@ -83,7 +109,8 @@ function recipesForm(html, value, categorRecipesId) {
     return {
         input,
         button,
-        selectCategoreiesRecipes
+        selectCategoreiesRecipes,
+        inputPerson
     };
 }
 
@@ -95,10 +122,10 @@ function recipesUpdate(recipesId) {
     api.recipes.read(recipesId).then((res) => {
         load.remove();
         console.log(res);
-        let form = recipesForm("Категория", res.name, res.recipe_category_id);
+        let form = recipesForm("Категория", res.name, res.recipe_category_id, res.number_persons);
 
         form.button.addEventListener("click", () => {
-            api.recipes.update(form.input.value, recipesId, form.selectCategoreiesRecipes.value).then(() => {
+            api.recipes.update(form.input.value, recipesId, form.selectCategoreiesRecipes.value, form.inputPerson.value).then(() => {
                 load.remove();
                 location.hash = "#recipes/list";
             })

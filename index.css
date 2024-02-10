@@ -73,3 +73,19 @@ select {
     background-color: #fff;
     border: 1px solid black;
 }
+
+.div-ingredients {
+    border: 1px solid black;
+    padding: 15px 10px;
+}
+
+.products-head,
+.head-units {
+    margin: 0;
+}
+
+.div-ingredients {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}

@@ -27,10 +27,10 @@ function categorRecipesDelete(categorRecipesId) {
     })
 }
 
-function categorRecipesForm(value) {
-    tag({ tag: "h4", className: "header", parent: document.body, html: "Создание рецепта" })
+function categorRecipesForm(value, parent) {
+    tag({ tag: "h4", className: "header", parent: parent, html: "Создание рецепта" })
 
-    let divForm = tag({ tag: "div", className: "divForm", parent: document.body });
+    let divForm = tag({ tag: "div", className: "divForm", parent: parent });
     let input = tag({ tag: "input", className: "input", parent: divForm, value: value });
     let button = tag({ tag: "button", className: "button", parent: divForm, html: "Сохранить" });
 
