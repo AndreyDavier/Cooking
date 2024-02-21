@@ -43,7 +43,12 @@ function router() {
     }
 
     else if (location.hash === "#products/create") {
-        productsCreate();
+        productsCreate({
+            parent: document.body,
+            afterCreate: () => {
+                location.hash = "#products/list"
+            }
+        });
     }
     else if (location.hash === "#products/list") {
         productsListRender();

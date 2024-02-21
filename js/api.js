@@ -177,11 +177,15 @@ let api = {
                 method: "DELETE"
             })
         },
-        update: (recipesName, recipesId, categoryId, person) => {
+        update: (recipesName, recipesId, categoryId, person, products) => {
             let formdata = new FormData();
             formdata.append("name", recipesName)
             formdata.append("recipe_category_id", categoryId)
             formdata.append("number_persons", person)
+            let json = JSON.stringify(products)
+            formdata.append("products", json)
+            console.log(json);
+
 
             return fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/recipies/${recipesId}`, {
                 method: "POST",
@@ -202,6 +206,4 @@ let api = {
                 .then((res) => res.json())
         }
     }
-
-
 }

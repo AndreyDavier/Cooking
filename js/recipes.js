@@ -1,3 +1,9 @@
+
+// 1)Добавить обьект в массив
+// 2)Нужна функия которая отрисовывает массив обьектов на странице 
+// 3) После добовления нового объекта в массив, запускать функцию
+
+
 function recipesListRender() {
 
     tag({ tag: "a", className: "link", parent: document.body, href: "#recipes/create", html: "Создать категорию" });
@@ -26,10 +32,12 @@ function recipesDelete(recipesId) {
         location.hash = "#recipes/list";
     })
 }
+
 // RECIPESFORM
-function recipesForm(html, value, categorRecipesId, person) {
+function recipesForm(html, value, categorRecipesId, person, unitId) {
 
     let load = loading();
+    let products = [];
 
     tag({ tag: "h4", className: "header", parent: document.body, html: html });
 
@@ -38,7 +46,6 @@ function recipesForm(html, value, categorRecipesId, person) {
     let divSelect = tag({ tag: "div", className: 'div-select', parent: divForm });
 
     let selectCategoreiesRecipes = createSelect(divSelect, categorRecipesId)
-    console.log(selectCategoreiesRecipes.value);
 
     let recipePlus = tag({ tag: "button", className: "button-plus", parent: divSelect, html: "+" })
 
@@ -47,52 +54,6 @@ function recipesForm(html, value, categorRecipesId, person) {
     let inputPerson = tag({ tag: "input", className: "quatity-input", parent: divPerson, value: person })
 
 
-    tag({ tag: "h4", className: "products-head", parent: divForm, html: "Продукты" })
-    let divIngredients = tag({ tag: "div", className: "div-ingredients", parent: divForm })
-
-    let divSelectProducts = tag({ tag: "div", className: 'div-select', parent:  divIngredients });
-    let ingredientsSelect = createSelect(divSelectProducts, null)
-    let productPlus = tag({ tag: "button", className: "button-plus", parent: divSelectProducts, html: "+" })
-    
-
-    api.products.list().then((res) => {
-        for (let product of res.data) {
-            tag({ tag: "option", className: "option", parent: ingredientsSelect, html: product.name, value: product.id })
-
-            ingredientsSelect.value = product.id
-
-        }
-    })
-
-    tag({ tag: "h4", className: "head-units", parent: divIngredients, html: "Количетсво" })
-
-    let inputUnits =  tag({ tag: "input", className: "units-input", parent: divIngredients})
-
-
-
-    recipePlus.addEventListener("click", () => {
-        let popupBg = tag({ tag: "div", className: "popup-bg", parent: document.body })
-        let popupContent = tag({ tag: "div", className: "popup-content", parent: popupBg })
-
-        categorRecipesCreate({
-            parent: popupContent,
-            afterCreate: (responce) => {
-                popupBg.remove();
-
-                api.categorRecipes.list().then((res) => {
-                    selectCategoreiesRecipes.innerHTML = ''
-
-                    for (let categoriesRecipes of res.data) {
-                        let options = tag({ tag: "option", className: "option", parent: selectCategoreiesRecipes, html: categoriesRecipes.name, value: categoriesRecipes.id })
-
-                        selectCategoreiesRecipes.value = responce.id
-                    }
-                })
-            }
-        })
-
-    })
-
     let categoriesRecipes = api.categorRecipes.list().then((res) => {
         for (let categoriesRecipes of res.data) {
             let options = tag({ tag: "option", className: "option", parent: selectCategoreiesRecipes, html: categoriesRecipes.name, value: categoriesRecipes.id })
@@ -100,17 +61,143 @@ function recipesForm(html, value, categorRecipesId, person) {
 
     })
 
+    tag({ tag: "h4", className: "products-head", parent: divForm, html: "Продукты" })
+    let div = tag({ tag: "div", className: "div", parent: divForm })
+
+
+    function renderProducts() {
+        let divIngredients = tag({ tag: "div", className: "div-ingredients", parent: div })
+        let divSelectProducts = tag({ tag: "div", className: 'div-select', parent: divIngredients });
+        let ingredientsSelect = createSelect(divSelectProducts, null)
+        console.log(ingredientsSelect);
+        let productPlus = tag({ tag: "button", className: "button-plus", parent: divSelectProducts, html: "+" })
+        productPlus.addEventListener("click", () => {
+            let popupBg = tag({ tag: "div", className: "popup-bg", parent: document.body })
+            let popupContent = tag({ tag: "div", className: "popup-content", parent: popupBg })
+
+            productsCreate({
+                parent: popupContent,
+                afterCreate: (responce) => {
+                    popupBg.remove;
+
+                    api.product.list().then((res) => {
+                        ingredientsSelect.innerHTML = ""
+
+                        for (let ingredient of res.data) {
+                            let options = tag({ tag: "option", className: "option", parent: ingredientsSelect, html: ingredient.name, value: ingredient.id })
+
+                            ingredientsSelect.value = responce.id
+
+                        }
+                    })
+                }
+            })
+        })
+
+        api.products.list().then((res) => {
+            for (let product of res.data) {
+                console.log(1);
+                tag({ tag: "option", className: "option", parent: ingredientsSelect, html: product.name, value: product.id })
+
+                ingredientsSelect.value = product.id
+
+            }
+        })
+
+        tag({ tag: "h4", className: "head-units", parent: divIngredients, html: "Количетсво" })
+        let divFormUnit = tag({ tag: "div", className: "unit-form", parent: divIngredients })
+        let inputUnits = tag({ tag: "input", className: "units-input", parent: divFormUnit })
+        console.log(2);
+
+        let unitSelect = createSelect(divFormUnit, unitId)
+        api.units.list().then((res) => {
+            for (let unit of res.data) {
+                tag({ tag: "option", className: "option", parent: unitSelect, html: unit.name, value: unit.id })
+
+                unitSelect.value = unit.id
+            }
+        })
+
+
+
+        recipePlus.addEventListener("click", () => {
+            let popupBg = tag({ tag: "div", className: "popup-bg", parent: document.body })
+            let popupContent = tag({ tag: "div", className: "popup-content", parent: popupBg })
+
+            categoriesRecipes({
+                parent: popupContent,
+                afterCreate: (responce) => {
+                    popupBg.remove();
+
+                    api.categorRecipes.list().then((res) => {
+                        selectCategoreiesRecipes.innerHTML = ''
+
+                        for (let categoriesRecipes of res.data) {
+                            let options = tag({ tag: "option", className: "option", parent: selectCategoreiesRecipes, html: categoriesRecipes.name, value: categoriesRecipes.id })
+
+                            selectCategoreiesRecipes.value = responce.id
+                        }
+                    })
+                }
+            })
+
+        })
+    }
+
+    function viewProducts() {
+        div.innerHTML = ''
+        for ({ count, unit_id, pruduct_id } of products) {
+            let divIngredients = tag({ tag: "div", className: "div-ingredients", parent: div })
+            let divSelectProducts = tag({ tag: "div", className: 'div-select', parent: divIngredients });
+            let ingredientsSelect = createSelect(divSelectProducts, null)
+            ingredientsSelect.value = pruduct_id
+
+            let productPlus = tag({ tag: "button", className: "button-plus", parent: divSelectProducts, html: "+" })
+
+            tag({ tag: "h4", className: "head-units", parent: divIngredients, html: "Количетсво" })
+            let divFormUnit = tag({ tag: "div", className: "unit-form", parent: divIngredients })
+
+            let inputUnits = tag({ tag: "input", className: "units-input", parent: divFormUnit })
+            inputUnits.value = count
+            let unitSelect = createSelect(divFormUnit, unitId)
+            unitSelect.value = unit_id
+        }
+    }
+
+
+    let buttonSaveProduct = tag({ tag: "button", className: "button", parent: divForm, html: "Добавить продукт" });
+
+    buttonSaveProduct.addEventListener("click", function () {
+
+        let obj = {
+            count: "",
+            unit_id: "",
+            pruduct_id: "",
+        }
+
+        products.push(obj)
+
+        viewProducts()
+    })
+
+
+    let inputCookingMethod = tag({ tag: "input", className: "cooking-method", parent: divForm })
+
     let button = tag({ tag: "button", className: "button", parent: divForm, html: "Сохранить" });
+
+
 
     Promise.all([categoriesRecipes]).then(() => {
         load.remove()
     })
 
+
     return {
         input,
         button,
         selectCategoreiesRecipes,
-        inputPerson
+        inputPerson,
+        products
     };
 }
 
@@ -123,9 +210,11 @@ function recipesUpdate(recipesId) {
         load.remove();
         console.log(res);
         let form = recipesForm("Категория", res.name, res.recipe_category_id, res.number_persons);
-
+        console.log(res.products);
         form.button.addEventListener("click", () => {
-            api.recipes.update(form.input.value, recipesId, form.selectCategoreiesRecipes.value, form.inputPerson.value).then(() => {
+
+            api.recipes.update(form.input.value, recipesId, form.selectCategoreiesRecipes.value, form.inputPerson.value, form.products).then(() => {
+                console.log(form.products);
                 load.remove();
                 location.hash = "#recipes/list";
             })

@@ -27,13 +27,13 @@ function productsDelete(productsId) {
 
 
 
-function productsForm(html, value, categoryId, unitId) {
+function productsForm(html, value, categoryId, unitId, parent) {
 
     let load = loading();
 
-    tag({ tag: "h4", className: "header", parent: document.body, html: html });
+    tag({ tag: "h4", className: "header", parent: parent, html: html });
 
-    let divForm = tag({ tag: "div", className: "divForm", parent: document.body });
+    let divForm = tag({ tag: "div", className: "divForm", parent: parent });
     let input = tag({ tag: "input", className: "input", parent: divForm, value: value });
 
     let divSelect = tag({ tag: "div", class: "div-select", parent: divForm })
@@ -120,7 +120,7 @@ function productsForm(html, value, categoryId, unitId) {
 
         selectUnits.value = unitId
     })
-    
+
     Promise.all([categories, units]).then(() => {
         load.remove()
     })
@@ -141,7 +141,7 @@ function productsForm(html, value, categoryId, unitId) {
 function productsUpdate(productsId) {
 
     let load = loading();
-    
+
     api.products.read(productsId).then((res) => {
         load.remove()
         console.log(res);
@@ -160,13 +160,13 @@ function productsUpdate(productsId) {
 
 
 
-function productsCreate() {
+function productsCreate(params) {
 
-    let form = productsForm("Создание продукта");
+    let form = productsForm("Создание продукта", null, null, null, params.parent);
 
     form.button.addEventListener("click", () => {
-        api.products.create(form.input.value, form.selectCategoreies.value, form.selectUnits.value).then(() => {
-            location.hash = "#products/list";
+        api.products.create(form.input.value, form.selectCategoreies.value, form.selectUnits.value).then((res) => {
+            params.afterCreate(res)
         })
     })
 }
