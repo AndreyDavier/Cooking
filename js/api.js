@@ -183,8 +183,8 @@ let api = {
             formdata.append("recipe_category_id", categoryId)
             formdata.append("number_persons", person)
             let json = JSON.stringify(products)
-            formdata.append("products", json)
             console.log(json);
+            formdata.append("products", json)
 
 
             return fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/recipies/${recipesId}`, {
