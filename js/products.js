@@ -145,7 +145,7 @@ function productsUpdate(productsId) {
     api.products.read(productsId).then((res) => {
         load.remove()
         console.log(res);
-        let form = productsForm("Редактирование продукта", res.name, res.category_id, res.unit_id);
+        let form = productsForm("Редактирование продукта", res.name, res.category_id, res.unit_id, document.body);
 
         form.button.addEventListener("click", () => {
             api.products.update(form.input.value, productsId, form.selectCategoreies.value, form.selectUnits.value).then(() => {

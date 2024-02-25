@@ -6,8 +6,6 @@ function menuListRender() {
 
 
     api.menu.list().then((res) => {
-        console.log(res);
-
         for (let item of res.data) {
 
             let li = tag({ tag: "li", className: "listitem", parent: ul, html: item.name });
@@ -60,7 +58,7 @@ function menuCreate() {
 
     let form = menuForm();
 
-    button.addEventListener("click", (e) => {
+    form.button.addEventListener("click", () => {
         api.menu.create(form.input.value).then(() => {
             location.hash = "#menu/list";
         })

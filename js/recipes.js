@@ -37,10 +37,9 @@ function recipesDelete(recipesId) {
 
 // RECIPESFORM
 
-function recipesForm(html, value, categorRecipesId, person, products) {
+function recipesForm(html, value, categorRecipesId, person, products, method) {
     let load = loading();
     // let products = [];
-
     tag({ tag: "h4", className: "header", parent: document.body, html: html });
 
     let divForm = tag({ tag: "div", className: "divForm", parent: document.body });
@@ -62,8 +61,8 @@ function recipesForm(html, value, categorRecipesId, person, products) {
         }
 
     })
-
     tag({ tag: "h4", className: "products-head", parent: divForm, html: "Продукты" })
+
     let div = tag({ tag: "div", className: "div", parent: divForm })
     viewProducts()
 
@@ -71,8 +70,8 @@ function recipesForm(html, value, categorRecipesId, person, products) {
 
     function viewProducts() {
         div.innerHTML = ''
-
         for (let productInRecipe of products) {
+
             let divIngredients = tag({ tag: "div", className: "div-ingredients", parent: div })
             let divSelectProducts = tag({ tag: "div", className: 'div-select', parent: divIngredients });
             let ingredientsSelect = createSelect(divSelectProducts, null)
@@ -89,7 +88,6 @@ function recipesForm(html, value, categorRecipesId, person, products) {
                     console.log(1);
                     tag({ tag: "option", className: "option", parent: ingredientsSelect, html: product.name, value: product.id })
                 }
-                // console.log(productInRecipe);
                 ingredientsSelect.value = productInRecipe.product_id
             })
 
@@ -130,7 +128,7 @@ function recipesForm(html, value, categorRecipesId, person, products) {
 
             inputUnits.value = productInRecipe.count
 
-            let unitSelect = createSelect(divFormUnit,productInRecipe.unit_id)
+            let unitSelect = createSelect(divFormUnit, productInRecipe.unit_id)
 
             unitSelect.addEventListener("input", () => {
                 productInRecipe.unit_id = unitSelect.value
@@ -166,7 +164,10 @@ function recipesForm(html, value, categorRecipesId, person, products) {
     })
 
 
-    let inputCookingMethod = tag({ tag: "input", className: "cooking-method", parent: divForm })
+    let inputCookingForm = tag({ tag: "form", className: "cooking-form", parent: divForm })
+    let inputCooking = tag({ tag: "textarea", className: "cooking-input", parent: inputCookingForm })
+
+    inputCooking.innerHTML = method
 
     let button = tag({ tag: "button", className: "button", parent: divForm, html: "Сохранить" });
 
@@ -182,7 +183,8 @@ function recipesForm(html, value, categorRecipesId, person, products) {
         button,
         selectCategoreiesRecipes,
         inputPerson,
-        products
+        products,
+        inputCooking
     };
 }
 
@@ -194,11 +196,10 @@ function recipesUpdate(recipesId) {
     api.recipes.read(recipesId).then((res) => {
         load.remove();
         console.log(res);
-
-        let form = recipesForm("Категория", res.name, res.recipe_category_id, res.number_persons, res.products);
+        let form = recipesForm("Категория", res.name, res.recipe_category_id, res.number_persons, res.products, res.cooking_method);
         form.button.addEventListener("click", () => {
 
-            api.recipes.update(form.input.value, recipesId, form.selectCategoreiesRecipes.value, form.inputPerson.value, form.products).then(() => {
+            api.recipes.update(form.input.value, recipesId, form.selectCategoreiesRecipes.value, form.inputPerson.value, form.products, form.inputCooking.value).then(() => {
                 console.log(form.products);
                 load.remove();
                 location.hash = "#recipes/list";
@@ -209,10 +210,10 @@ function recipesUpdate(recipesId) {
 
 function recipesCreate() {
 
-    let form = recipesForm("Создание рецепта");
+    let form = recipesForm("Создание рецепта", null, null, null, []);
 
     form.button.addEventListener("click", () => {
-        api.recipes.create(form.input.value, form.selectCategoreiesRecipes.value).then(() => {
+        api.recipes.create(form.input.value, form.selectCategoreiesRecipes.value, form.products, form.inputCooking.value, form.inputPerson.value).then(() => {
             location.hash = "#recipes/list";
         })
     })

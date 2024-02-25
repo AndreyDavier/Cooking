@@ -47,7 +47,7 @@ function categorRecipesUpdate(categorRecipesId) {
     api.categorRecipes.read(categorRecipesId).then((res) => {
         console.log(res);
         load.remove();
-        let form = categorRecipesForm(res.name);
+        let form = categorRecipesForm(res.name,document.body);
 
         form.button.addEventListener("click", () => {
             api.categorRecipes.update(form.input.value, categorRecipesId).then(() => {
