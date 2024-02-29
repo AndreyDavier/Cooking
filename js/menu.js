@@ -26,16 +26,68 @@ function menuDelete(menuId) {
     })
 }
 
-function menuForm(value) {
+function menuForm(value, dishes) {
+    console.log(dishes);
+
     tag({ tag: "h4", className: "header", parent: document.body, html: "Создание меню" });
 
     let divForm = tag({ tag: "div", className: "divForm", parent: document.body });
     let input = tag({ tag: "input", className: "input", parent: divForm, value: value });
+
+
+    let divCount = tag({ tag: "div", className: "div-count", parent: divForm })
+    let headCount = tag({ tag: "span", className: "head-count", parent: divCount, html: "Количество человек" })
+    let inputCount = tag({ tag: "input", className: "input-count", parent: divCount })
+
+    let table = tag({ tag: "table", className: "table", parent: divForm })
+    let thead = tag({ tag: "thead", className: "thead", parent: table })
+    let tr = tag({ tag: "tr", className: "tr", parent: thead })
+    let thProduct = tag({ tag: "th", className: "th", parent: tr, html: "Блюда:" })
+    let thCount = tag({ tag: "th", className: "th", parent: tr, html: "На 1 чел:" })
+    let thTotalWeight = tag({ tag: "th", className: "th", parent: tr, html: "Общий вес:" })
+    let tbody = tag({ tag: "tbody", className: "tbody", parent: table })
+
+    console.log(dishes);
+    function addRecipes() {
+
+        for (let dishesInMenu of dishes) {
+            let tr = tag({ tag: "tr", className: "tr", parent: tbody })
+            let tdProduct = tag({ tag: "td", className: "td", parent: tr })
+            let inputProduct = tag({ tag: "input", className: "input-info", parent: tdProduct })
+
+            let tdUnit = tag({ tag: "td", className: "td", parent: tr })
+            let inputUnitcount = tag({ tag: "input", className: "input-info", parent: tdUnit })
+            let inputUnit = tag({ tag: "input", className: "input-info", parent: tdUnit })
+
+            let tdTotalWeightt = tag({ tag: "td", className: "td", parent: tr })
+            let inputTotalWeight = tag({ tag: "input", className: "input-info", parent: tdTotalWeightt })
+            let tdButton = tag({ tag: "td", className: "td", parent: tr })
+            let button = tag({ tag: "button", className: "button-delete", parent: tdButton, html: "g" });
+        }
+    }
+
+    let buttonDish = tag({ tag: "button", className: "button", parent: divForm, html: "Добавить блюдо" })
+    buttonDish.addEventListener("click", () => {
+
+        let dishesInMenu = {
+            dishes: "",
+            unitNumber: "",
+            unit: "",
+            totalWeight: ""
+        }
+        dishes.push(dishesInMenu)
+
+        addRecipes()
+    })
+
+
     let button = tag({ tag: "button", className: "button", parent: divForm, html: "Сохранить" });
 
     return {
         input,
-        button
+        button,
+        inputCount,
+        dishes
     };
 }
 
@@ -43,11 +95,12 @@ function menuUpdate(menuId) {
     let load = loading();
 
     api.menu.read(menuId).then((res) => {
+        console.log(res);
         load.remove();
-        let form = menuForm(res.name);
+        let form = menuForm(res.name, res.dishes);
 
         form.button.addEventListener("click", () => {
-            api.menu.update(form.input.value, menuId).then(() => {
+            api.menu.update(form.input.value, menuId, form.inputCount.value, form.dishes).then(() => {
                 location.hash = "#menu/list";
             })
         })
@@ -56,10 +109,10 @@ function menuUpdate(menuId) {
 
 function menuCreate() {
 
-    let form = menuForm();
+    let form = menuForm(null, []);
 
     form.button.addEventListener("click", () => {
-        api.menu.create(form.input.value).then(() => {
+        api.menu.create(form.input.value, form.inputCount.value, form.dishes).then(() => {
             location.hash = "#menu/list";
         })
     })

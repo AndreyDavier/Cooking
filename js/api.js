@@ -111,20 +111,27 @@ let api = {
                 method: "DELETE"
             })
         },
-        update: (menuName, menuID) => {
+        update: (menuName, menuID, person, dishes) => {
             let formdata = new FormData()
             formdata.append("name", menuName)
+            formdata.append("numberPersons", person)
+
+            let json = JSON.stringify(dishes)
+            formdata.append("dishes", json)
 
             return fetch(`http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/menu/${menuID}`, {
                 method: "POST",
                 body: formdata
             })
         },
-        create: (menuName) => {
+        create: (menuName, person, dishes) => {
             return fetch("http://q904002e.beget.tech/js-task/std/andrey/cook-calc/api/menu/", {
                 method: "PUT",
                 body: JSON.stringify({
-                    name: menuName
+                    name: menuName,
+                    numberPersons: person,
+                    dishes: dishes
+
                 })
             })
         },

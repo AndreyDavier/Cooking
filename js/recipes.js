@@ -85,7 +85,6 @@ function recipesForm(html, value, categorRecipesId, person, products, method) {
 
             api.products.list().then((res) => {
                 for (let product of res.data) {
-                    console.log(1);
                     tag({ tag: "option", className: "option", parent: ingredientsSelect, html: product.name, value: product.id })
                 }
                 ingredientsSelect.value = productInRecipe.product_id

@@ -95,7 +95,30 @@ select {
     gap: 10px;
 }
 
-.cooking-input{
+.cooking-input {
     width: 300px;
     height: 200px;
+}
+
+.div-count {
+    margin: 28px 0;
+}
+
+.div-count {
+    display: flex;
+    gap: 15px;
+}
+
+.input-count {
+    max-width: 50px;
+}
+
+.input-info {
+    width: 40px;
+}
+
+.button-delete {
+    width: 15px;
+    height: 15px;
+    background: blue;
 }
