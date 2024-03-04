@@ -75,7 +75,7 @@ function recipesForm(html, value, categorRecipesId, person, products, method) {
             let divIngredients = tag({ tag: "div", className: "div-ingredients", parent: div })
             let divSelectProducts = tag({ tag: "div", className: 'div-select', parent: divIngredients });
             let ingredientsSelect = createSelect(divSelectProducts, null)
-            // console.log(productInRecipe.product_id);
+
             ingredientsSelect.addEventListener("input", () => {
                 productInRecipe.product_id = ingredientsSelect.value
 
