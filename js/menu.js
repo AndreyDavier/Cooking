@@ -27,8 +27,6 @@ function menuDelete(menuId) {
 }
 
 function menuForm(value, dishes, person) {
-    console.log(dishes);
-
     tag({ tag: "h4", className: "header", parent: document.body, html: "Создание меню" });
 
     let divForm = tag({ tag: "div", className: "divForm", parent: document.body });
@@ -47,25 +45,61 @@ function menuForm(value, dishes, person) {
     let thTotalWeight = tag({ tag: "th", className: "th", parent: tr, html: "Общий вес:" })
     let tbody = tag({ tag: "tbody", className: "tbody", parent: table })
 
+
     addRecipes()
 
     console.log(dishes);
     function addRecipes() {
         tbody.innerHTML = ""
+
+        function reduceResult() {
+
+            const result = dishes.reduce((acc, el) => {
+                acc.unitNumber = Number(acc.unitNumber) ? Number(acc.unitNumber) + Number(el.unitNumber) : Number(el.unitNumber);
+                acc.totalWeight = Number(acc.totalWeight) ? Number(acc.totalWeight) + Number(el.totalWeight) : Number(el.totalWeight);
+                return acc;
+
+
+            }, {})
+
+            return result
+
+        }
+
+
         for (let dishesInMenu of dishes) {
             let tr = tag({ tag: "tr", className: "tr", parent: tbody })
             let tdProduct = tag({ tag: "td", className: "td", parent: tr })
 
-            let inputProduct = tag({ tag: "input", className: "input-info", parent: tdProduct, value: dishesInMenu.dishes })
+            let inputProduct = tag({ tag: "select", className: "select-product", parent: tdProduct, value: dishesInMenu.dishes })
+
+            api.recipes.list().then((res) => {
+                for (let recipe of res.data) {
+                    tag({ tag: "option", className: "option", parent: inputProduct, html: recipe.name, value: recipe.id })
+                }
+
+                inputProduct.value = dishesInMenu.dishes
+
+
+            })
+
             inputProduct.addEventListener("input", () => {
                 dishesInMenu.dishes = inputProduct.value
             })
 
+
+
             let tdUnit = tag({ tag: "td", className: "td", parent: tr })
+
+
 
             let inputUnitcount = tag({ tag: "input", className: "input-info", parent: tdUnit, value: dishesInMenu.unitNumber })
             inputUnitcount.addEventListener("input", () => {
                 dishesInMenu.unitNumber = inputUnitcount.value
+
+                let reduce = reduceResult()
+                resultCount.innerHTML = reduce.unitNumber
+
             })
 
             let inputUnit = tag({ tag: "input", className: "input-info", parent: tdUnit, value: dishesInMenu.unit })
@@ -77,19 +111,43 @@ function menuForm(value, dishes, person) {
             let inputTotalWeight = tag({ tag: "input", className: "input-info", parent: tdTotalWeightt, value: dishesInMenu.totalWeight })
             inputTotalWeight.addEventListener("input", () => {
                 dishesInMenu.totalWeight = inputTotalWeight.value
+
+                let reduce = reduceResult()
+
+                totalRezult.innerHTML = reduce.totalWeight
             })
+
+
+
+
 
             let tdButton = tag({ tag: "td", className: "td", parent: tr })
             let buttonDel = tag({ tag: "button", className: "button-delete", parent: tdButton, html: "Del" });
 
             buttonDel.addEventListener("click", (e) => {
-                let temp = e.target.closest("tr")
-                if (tr) {
-                    tr.remove()
-                }
+
+                let indexDishes = dishes.indexOf(dishesInMenu)
+                console.log(indexDishes);
+                let arrayDishes = dishes.splice(indexDishes, 1)
+
+                let temp = e.target.closest("tr").remove()
+
             })
         }
+
+        let reduce = reduceResult()
+
+        let trresult = tag({ tag: "tr", className: "tr", parent: tbody })
+        let thResult = tag({ tag: "th", className: "th", parent: trresult, html: "Итого: " })
+
+        let resultCount = tag({ tag: "th", className: "th", parent: trresult, html: reduce.unitNumber })
+        let rezultUnit = tag({ tag: "th", className: "th", parent: trresult, html: "гр" })
+        let totalRezult = tag({ tag: "th", className: "th", parent: trresult, html: reduce.totalWeight })
+
+
     }
+    let divResult = tag({ tag: "div", className: "result", parent: divForm })
+    let headResult = tag({ tag: "span", className: "head-result", parent: divResult })
 
     let buttonDish = tag({ tag: "button", className: "button", parent: divForm, html: "Добавить блюдо" })
     buttonDish.addEventListener("click", () => {

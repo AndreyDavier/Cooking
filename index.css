@@ -13,6 +13,9 @@ a {
     padding: 10px 10px 10px 10px;
 }
 
+h5 {
+    margin: 0;
+}
 
 
 .maindiv {
@@ -122,4 +125,8 @@ select {
     height: 25px;
     background: blue;
     color: white;
+}
+
+.select-product {
+    width: 80px;
 }

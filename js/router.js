@@ -53,6 +53,9 @@ function router() {
     else if (location.hash === "#products/list") {
         productsListRender();
     }
+    else if (location.hash === "#purchase/list") {
+        purchaseListRender()
+    }
 
     else if (location.hash === "#recipes/create") {
         recipesCreate();
